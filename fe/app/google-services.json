@@ -1,0 +1,47 @@
+{
+  "project_info": {
+    "project_number": "561800482716",
+    "project_id": "quizz-app-ca4ca",
+    "storage_bucket": "quizz-app-ca4ca.firebasestorage.app"
+  },
+  "client": [
+    {
+      "client_info": {
+        "mobilesdk_app_id": "1:561800482716:android:045eb9a3ae6cd9ac2cc259",
+        "android_client_info": {
+          "package_name": "com.example.quizzapp"
+        }
+      },
+      "oauth_client": [
+        {
+          "client_id": "561800482716-qnu28osbo0t1mgpdm8v5kffq5v00epct.apps.googleusercontent.com",
+          "client_type": 1,
+          "android_info": {
+            "package_name": "com.example.quizzapp",
+            "certificate_hash": "e833f85a16b9e1c7aebea1ebc8c51ec5f659f992"
+          }
+        },
+        {
+          "client_id": "561800482716-33j6dsfrifu9t3gpg6ttnuvr9ioo3eug.apps.googleusercontent.com",
+          "client_type": 3
+        }
+      ],
+      "api_key": [
+        {
+          "current_key": "AIzaSyDcR7E05lF4ywxUjF-McQUtJJnrfgYRTvg"
+        }
+      ],
+      "services": {
+        "appinvite_service": {
+          "other_platform_oauth_client": [
+            {
+              "client_id": "561800482716-33j6dsfrifu9t3gpg6ttnuvr9ioo3eug.apps.googleusercontent.com",
+              "client_type": 3
+            }
+          ]
+        }
+      }
+    }
+  ],
+  "configuration_version": "1"
+}

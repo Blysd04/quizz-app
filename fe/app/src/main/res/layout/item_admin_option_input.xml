@@ -1,0 +1,33 @@
+<?xml version="1.0" encoding="utf-8"?>
+<LinearLayout xmlns:android="http://schemas.android.com/apk/res/android"
+    android:layout_width="match_parent"
+    android:layout_height="wrap_content"
+    android:orientation="horizontal"
+    android:gravity="center_vertical"
+    android:layout_marginVertical="6dp">
+
+    <RadioButton
+        android:id="@+id/rbIsCorrect"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:layout_marginRight="8dp"/>
+
+    <EditText
+        android:id="@+id/etAnswerText"
+        android:layout_width="0dp"
+        android:layout_height="wrap_content"
+        android:layout_weight="1"
+        android:hint="Nhập nội dung đáp án"
+        android:background="@drawable/bg_input_field"
+        android:textColor="#000000"
+        android:textSize="15sp"/>
+
+    <ImageButton
+        android:id="@+id/btnRemoveOption"
+        android:layout_width="40dp"
+        android:layout_height="40dp"
+        android:background="?android:attr/selectableItemBackground"
+        android:src="@android:drawable/ic_menu_close_clear_cancel"
+        android:contentDescription="Xóa đáp án này"
+        android:layout_marginLeft="8dp"/>
+</LinearLayout>
