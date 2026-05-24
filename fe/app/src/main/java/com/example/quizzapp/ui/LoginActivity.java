@@ -48,7 +48,7 @@ public class LoginActivity extends AppCompatActivity {
         googleSignInClient = GoogleSignIn.getClient(this, gso);
 
         // Bắt sự kiện click nút bằng ViewBinding
-        binding.btnGoogleSignIn.setOnClickListener(v -> {
+        binding.btnGoogleSignInCard.setOnClickListener(v -> {
             Intent signInIntent = googleSignInClient.getSignInIntent();
             startActivityForResult(signInIntent, RC_SIGN_IN);
         });

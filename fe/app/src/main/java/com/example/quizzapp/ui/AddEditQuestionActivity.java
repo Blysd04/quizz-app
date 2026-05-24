@@ -1,4 +1,4 @@
-package com.example.quizapp.ui;
+package com.example.quizzapp.ui;
 
 import android.os.Bundle;
 import android.view.LayoutInflater;

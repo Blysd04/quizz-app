@@ -30,7 +30,7 @@ public class QuestionAdapter extends RecyclerView.Adapter<QuestionAdapter.Questi
 
     @Override
     public void onBindViewHolder(@NonNull QuestionViewHolder holder, int position) {
-        QuestionResponse question = questionList[position];
+        QuestionResponse question = questionList.get(position);
         holder.tvCategory.setText(question.getCategory().toUpperCase());
         holder.tvQuestionText.setText(question.getQuestionText());
 

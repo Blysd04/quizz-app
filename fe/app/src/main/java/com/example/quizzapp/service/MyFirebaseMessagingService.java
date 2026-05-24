@@ -1,4 +1,4 @@
-package com.example.quizzapp.services;
+package com.example.quizzapp.service;
 
 import android.app.NotificationChannel;
 import android.app.NotificationManager;
@@ -30,18 +30,37 @@ public class MyFirebaseMessagingService extends FirebaseMessagingService {
     public void onMessageReceived(@NonNull RemoteMessage remoteMessage) {
         super.onMessageReceived(remoteMessage);
 
+        // 1. Khởi tạo nội dung hiển thị mặc định
         String title = "Quiz Master Update!";
         String message = "Có dữ liệu mới cần bạn kiểm tra.";
 
+        // Nếu thông báo gửi về dạng thông thường (có Title/Body hiển thị sẵn)
         if (remoteMessage.getNotification() != null) {
             title = remoteMessage.getNotification().getTitle();
             message = remoteMessage.getNotification().getBody();
         }
 
-        // Xử lý đọc Custom Data gửi kèm từ Node.js server hoặc Firebase Console
+        // 2. XỬ LÝ ĐỌC CUSTOM DATA (DEEP LINK BẢO MẬT KÉP)
         Map<String, String> data = remoteMessage.getData();
-        String questionId = data.get("questionId"); // Lấy ID câu hỏi để làm Deep Link
+        String questionId = null;
 
+        if (data.size() > 0) {
+            // Lấy biến type (có thể là "question" của bạn hoặc "product" của thầy)
+            String type = data.get("type");
+
+            if (type != null && type.equals("question") ) {
+
+                questionId = data.get("questionId");
+
+                // Bạn có thể tùy biến lại nội dung chữ hiển thị cho phù hợp với QuizApp
+                if (remoteMessage.getNotification() == null) {
+                    title = "Cập Nhật Câu Hỏi Mới!";
+                    message = "Bấm vào để chỉnh sửa câu hỏi số: " + questionId;
+                }
+            }
+        }
+
+        // 3. Gửi toàn bộ dữ liệu sang hàm tạo Notification trên thanh trạng thái điện thoại
         sendNotification(title, message, questionId);
     }
 

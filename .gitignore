@@ -1,0 +1,6 @@
+google-services.json
+*service-account.json
+firebase-key.json
+
+node_modules/
+.env
