@@ -1,6 +1,7 @@
 package com.example.quizzapp.models;
+import java.io.Serializable;
 
-public class AnswerOption {
+public class AnswerOption implements Serializable{
     private String answerText;
     private boolean isCorrect;
 
@@ -13,6 +14,6 @@ public class AnswerOption {
     public String getAnswerText() { return answerText; }
     public void setAnswerText(String answerText) { this.answerText = answerText; }
 
-    public boolean isIsCorrect() { return isCorrect; }
+    public boolean isCorrect() { return isCorrect; }
     public void setIsCorrect(boolean isCorrect) { this.isCorrect = isCorrect; }
 }

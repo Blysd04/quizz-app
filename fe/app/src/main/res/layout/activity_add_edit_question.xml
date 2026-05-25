@@ -82,7 +82,7 @@
                 android:layout_height="55dp"
                 android:layout_weight="1"
                 android:text="LƯU LẠI"
-                android:backgroundTint="#15803D"
+                android:backgroundTint="#6d28d9"
                 android:textColor="#FFFFFF"
                 android:layout_marginRight="8dp"/>
 

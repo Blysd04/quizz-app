@@ -13,7 +13,7 @@ android {
     }
 
     defaultConfig {
-        applicationId = "com.example.minishop"
+        applicationId = "com.example.quizzapp"
         minSdk = 24
         targetSdk = 36
         versionCode = 1
@@ -68,7 +68,7 @@ dependencies {
     androidTestImplementation(libs.espresso.core)
 
     implementation(platform("com.google.firebase:firebase-bom:34.13.0"))
-    implementation("com.google.firebase:firebase-analytics")
+    implementation("com.google.firebase:firebase-analytics:22.0.0")
 
     implementation ("com.squareup.retrofit2:retrofit:2.9.0")
     implementation ("com.squareup.retrofit2:converter-gson:2.9.0")
@@ -76,7 +76,7 @@ dependencies {
     // Thư viện hỗ trợ Log để debug API trên Logcat
     implementation ("com.squareup.okhttp3:logging-interceptor:4.11.0")
 
-    implementation ("com.google.firebase:firebase-auth-ktx")
+    implementation ("com.google.firebase:firebase-auth-ktx:23.0.0")
     implementation ("com.google.android.gms:play-services-auth:21.2.0")
     implementation("com.google.firebase:firebase-messaging:24.1.0")
 }

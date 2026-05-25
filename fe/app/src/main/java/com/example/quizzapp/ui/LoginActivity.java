@@ -1,12 +1,21 @@
 package com.example.quizzapp.ui;
 
+import android.Manifest;
 import android.content.Intent;
+import android.content.SharedPreferences;
+import android.content.pm.PackageManager;
+import android.os.Build;
 import android.os.Bundle;
 import android.util.Log;
 import android.widget.Toast;
+
 import androidx.annotation.Nullable;
 import androidx.appcompat.app.AppCompatActivity;
+import androidx.core.app.ActivityCompat;
+import androidx.core.content.ContextCompat;
 
+import com.example.quizzapp.api.ApiClient;
+import com.example.quizzapp.api.ApiService;
 import com.example.quizzapp.databinding.ActivityLoginBinding;
 import com.google.android.gms.auth.api.signin.GoogleSignIn;
 import com.google.android.gms.auth.api.signin.GoogleSignInAccount;
@@ -18,40 +27,56 @@ import com.google.firebase.auth.AuthCredential;
 import com.google.firebase.auth.FirebaseAuth;
 import com.google.firebase.auth.FirebaseUser;
 import com.google.firebase.auth.GoogleAuthProvider;
+import com.google.firebase.messaging.FirebaseMessaging;
+
+import java.util.HashMap;
+import java.util.Map;
+
+import retrofit2.Call;
+import retrofit2.Callback;
+import retrofit2.Response;
 
 public class LoginActivity extends AppCompatActivity {
+
+    private static final String TAG = "LoginActivity";
+    private static final int RC_SIGN_IN = 9001;
+    private static final int REQUEST_CODE_NOTIFICATION = 101;
 
     private ActivityLoginBinding binding;
     private GoogleSignInClient googleSignInClient;
     private FirebaseAuth mAuth;
-    private static final int RC_SIGN_IN = 9001;
-
-    // Biến static toàn cục để lưu Token chuỗi Bearer dùng cho toàn App
-    public static String userToken = null;
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
-
-        // Cấu hình ViewBinding trong Java
         binding = ActivityLoginBinding.inflate(getLayoutInflater());
         setContentView(binding.getRoot());
 
         mAuth = FirebaseAuth.getInstance();
 
-        // Cấu hình Google Sign-In (Thay bằng mã Web Client ID của bạn lấy từ Firebase)
+        // 1. Kiểm tra quyền thông báo (cho Android 13+)
+        checkNotificationPermission();
+
         GoogleSignInOptions gso = new GoogleSignInOptions.Builder(GoogleSignInOptions.DEFAULT_SIGN_IN)
-                .requestIdToken("MÃ_WEB_CLIENT_ID_CỦA_BẠN.apps.googleusercontent.com")
+                .requestIdToken("561800482716-33j6dsfrifu9t3gpg6ttnuvr9ioo3eug.apps.googleusercontent.com")
                 .requestEmail()
                 .build();
 
         googleSignInClient = GoogleSignIn.getClient(this, gso);
+        binding.btnGoogleSignInCard.setOnClickListener(view -> signInWithGoogle());
+    }
 
-        // Bắt sự kiện click nút bằng ViewBinding
-        binding.btnGoogleSignInCard.setOnClickListener(v -> {
-            Intent signInIntent = googleSignInClient.getSignInIntent();
-            startActivityForResult(signInIntent, RC_SIGN_IN);
-        });
+    private void checkNotificationPermission() {
+        if (Build.VERSION.SDK_INT >= Build.VERSION_CODES.TIRAMISU) {
+            if (ContextCompat.checkSelfPermission(this, Manifest.permission.POST_NOTIFICATIONS) != PackageManager.PERMISSION_GRANTED) {
+                ActivityCompat.requestPermissions(this, new String[]{Manifest.permission.POST_NOTIFICATIONS}, REQUEST_CODE_NOTIFICATION);
+            }
+        }
+    }
+
+    private void signInWithGoogle() {
+        Intent signInIntent = googleSignInClient.getSignInIntent();
+        startActivityForResult(signInIntent, RC_SIGN_IN);
     }
 
     @Override
@@ -61,38 +86,62 @@ public class LoginActivity extends AppCompatActivity {
             Task<GoogleSignInAccount> task = GoogleSignIn.getSignedInAccountFromIntent(data);
             try {
                 GoogleSignInAccount account = task.getResult(ApiException.class);
-                if (account != null) {
-                    firebaseAuthWithGoogle(account.getIdToken());
-                }
+                if (account != null) firebaseAuthWithGoogle(account.getIdToken());
             } catch (ApiException e) {
-                Toast.makeText(this, "Lỗi đăng nhập Google: " + e.getMessage(), Toast.LENGTH_SHORT).show();
+                Log.e(TAG, "Google sign in failed", e);
             }
         }
     }
 
     private void firebaseAuthWithGoogle(String idToken) {
         AuthCredential credential = GoogleAuthProvider.getCredential(idToken, null);
-        mAuth.signInWithCredential(credential)
-                .addOnCompleteListener(this, task -> {
-                    if (task.isSuccessful()) {
-                        FirebaseUser user = mAuth.getCurrentUser();
-                        if (user != null) {
-                            // Lấy ID Token thật từ Firebase gửi lên Node.js
-                            user.getIdToken(true).addOnSuccessListener(getMergedTokenResult -> {
-                                // Lưu token kèm chữ Bearer
-                                userToken = "Bearer " + getMergedTokenResult.getToken();
+        mAuth.signInWithCredential(credential).addOnCompleteListener(this, task -> {
+            if (task.isSuccessful()) {
+                processUserLogin(mAuth.getCurrentUser());
+            } else {
+                Toast.makeText(this, "Đăng nhập thất bại", Toast.LENGTH_SHORT).show();
+            }
+        });
+    }
 
-                                Log.d("TOKEN_THAT", userToken);
-                                Toast.makeText(LoginActivity.this, "Đăng nhập thành công!", Toast.LENGTH_SHORT).show();
+    private void processUserLogin(FirebaseUser user) {
+        if (user == null) return;
 
-                                // Sau này chuyển sang MainActivity thì mở dòng dưới ra:
-                                // startActivity(new Intent(LoginActivity.this, MainActivity.class));
-                                // finish();
-                            });
-                        }
-                    } else {
-                        Toast.makeText(LoginActivity.this, "Xác thực Firebase thất bại", Toast.LENGTH_SHORT).show();
-                    }
-                });
+        user.getIdToken(true).addOnCompleteListener(task -> {
+            if (task.isSuccessful()) {
+                String token = task.getResult().getToken();
+                getSharedPreferences("MyPrefs", MODE_PRIVATE).edit().putString("auth_token", token).apply();
+
+                // 2. GỬI FCM TOKEN LÊN SERVER
+                sendFcmTokenToServer(token);
+
+                Intent intent = new Intent(LoginActivity.this, MainActivity.class);
+                intent.setFlags(Intent.FLAG_ACTIVITY_NEW_TASK | Intent.FLAG_ACTIVITY_CLEAR_TASK);
+                startActivity(intent);
+                finish();
+            }
+        });
+    }
+
+    private void sendFcmTokenToServer(String authToken) {
+        FirebaseMessaging.getInstance().getToken().addOnCompleteListener(task -> {
+            if (!task.isSuccessful()) return;
+
+            String fcmToken = task.getResult();
+            ApiService apiService = ApiClient.getClient().create(ApiService.class);
+
+            // Bạn cần tạo endpoint update-fcm ở server và phương thức trong ApiService
+            Map<String, String> body = new HashMap<>();
+            body.put("fcmToken", fcmToken);
+
+            apiService.updateFcmToken("Bearer " + authToken, body).enqueue(new Callback<Void>() {
+                @Override public void onResponse(Call<Void> call, Response<Void> response) {
+                    Log.d(TAG, "Đã cập nhật FCM Token lên Server");
+                }
+                @Override public void onFailure(Call<Void> call, Throwable t) {
+                    Log.e(TAG, "Lỗi gửi FCM Token: " + t.getMessage());
+                }
+            });
+        });
     }
 }

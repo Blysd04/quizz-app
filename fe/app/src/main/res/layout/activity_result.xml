@@ -3,30 +3,35 @@
     android:layout_width="match_parent"
     android:layout_height="match_parent"
     android:orientation="vertical"
-    android:background="#F1F5F9"
-    android:padding="16dp">
+    android:background="#F8FAFC"
+    android:padding="20dp">
 
     <TextView
-        android:layout_width="wrap_content"
+        android:layout_width="match_parent"
         android:layout_height="wrap_content"
-        android:text="Kết Quả Bài Test"
+        android:text="KẾT QUẢ BÀI TEST"
+        android:textColor="#7F3DFF"
         android:textSize="24sp"
         android:textStyle="bold"
-        android:textColor="#000000"
-        android:layout_marginBottom="16dp"/>
+        android:gravity="center"
+        android:layout_marginBottom="20dp"/>
 
-    <androidx.recyclerview.widget.RecyclerView
-        android:id="@+id/rvResults"
+    <ScrollView
         android:layout_width="match_parent"
         android:layout_height="0dp"
-        android:layout_weight="1" />
+        android:layout_weight="1">
+        <LinearLayout
+            android:id="@+id/lnResultContainer"
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:orientation="vertical" />
+    </ScrollView>
 
     <Button
         android:id="@+id/btnBackHome"
         android:layout_width="match_parent"
         android:layout_height="55dp"
         android:text="VỀ TRANG CHỦ"
-        android:backgroundTint="#6d28d9"
-        android:textColor="#FFFFFF"
-        android:layout_marginTop="10dp"/>
+        android:backgroundTint="#7F3DFF"
+        android:textColor="#FFFFFF" />
 </LinearLayout>

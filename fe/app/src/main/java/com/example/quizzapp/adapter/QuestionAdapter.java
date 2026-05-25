@@ -10,15 +10,19 @@ import androidx.annotation.NonNull;
 import androidx.recyclerview.widget.RecyclerView;
 import com.example.quizzapp.R;
 import com.example.quizzapp.models.QuestionResponse;
+import com.example.quizzapp.ui.AddEditQuestionActivity;
+
 import java.util.List;
 
 public class QuestionAdapter extends RecyclerView.Adapter<QuestionAdapter.QuestionViewHolder> {
     private List<QuestionResponse> questionList;
     private Context context;
+    private String userToken;
 
     public QuestionAdapter(List<QuestionResponse> questionList, Context context) {
         this.questionList = questionList;
         this.context = context;
+        this.userToken = userToken;
     }
 
     @NonNull
@@ -36,9 +40,11 @@ public class QuestionAdapter extends RecyclerView.Adapter<QuestionAdapter.Questi
 
         // Xử lý sự kiện bấm nút Edit trên từng câu hỏi ở trang chủ
         holder.btnEditShortcut.setOnClickListener(v -> {
-            Intent intent = new Intent(context, com.example.quizapp.ui.AddEditQuestionActivity.class);
-            intent.putExtra("IS_EDIT_MODE", true);
-            intent.putExtra("QUESTION_ID", question.get_id()); // Truyền ID sang để API lấy dữ liệu cụ thể
+            // Lưu ý: 'context' thường là view.getContext()
+            Intent intent = new Intent(context, AddEditQuestionActivity.class);
+            intent.putExtra("IS_EDIT_MODE", true); // Chế độ SỬA
+            intent.putExtra("QUESTION_ID", question.getId());
+            intent.putExtra("USER_TOKEN", userToken);
             context.startActivity(intent);
         });
     }

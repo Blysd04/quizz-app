@@ -21,7 +21,6 @@
         android:id="@+id/btnGoogleSignInCard"
         android:layout_width="match_parent"
         android:layout_height="55dp"
-        android:layout_mx="16dp"
         app:cardCornerRadius="28dp"
         app:cardBackgroundColor="#FFFFFF"
         app:cardElevation="6dp"

@@ -1,13 +1,17 @@
 package com.example.quizzapp.api;
 
+import com.example.quizzapp.models.QuestionRequest;
 import com.example.quizzapp.models.QuestionResponse;
 import java.util.List;
 import java.util.Map;
 import retrofit2.Call;
 import retrofit2.http.Body;
+import retrofit2.http.DELETE;
 import retrofit2.http.GET;
 import retrofit2.http.Header;
 import retrofit2.http.POST;
+import retrofit2.http.PUT;
+import retrofit2.http.Path;
 
 public interface ApiService {
     // 1. Lấy tất cả câu hỏi ở trang chủ
@@ -18,10 +22,28 @@ public interface ApiService {
     @GET("api/questions/my-questions")
     Call<List<QuestionResponse>> getMyQuestions(@Header("Authorization") String token);
 
+    @GET("api/questions/{id}")
+    Call<QuestionResponse> getQuestionById(@Header("Authorization") String token, @Path("id") String questionId);
+
     // 3. Tạo câu hỏi mới
+    // Sửa Map thành QuestionRequest
     @POST("api/questions")
     Call<QuestionResponse> createQuestion(
             @Header("Authorization") String token,
-            @Body Map<String, Object> requestBody
+            @Body QuestionRequest request // Truyền trực tiếp Object vào đây
     );
+
+    @PUT("api/questions/{id}")
+    Call<QuestionResponse> updateQuestion(@Header("Authorization") String token, @Path("id") String id, @Body QuestionRequest request);
+
+    // 5. Delete câu hỏi (Xóa)
+    // Đường dẫn bao gồm ID câu hỏi: api/questions/{id}
+    @DELETE("api/questions/{id}")
+    Call<Void> deleteQuestion(
+            @Header("Authorization") String token,
+            @Path("id") String questionId
+    );
+
+    @POST("api/questions/me/fcm-token") // Hoặc đường dẫn tùy bạn
+    Call<Void> updateFcmToken(@Header("Authorization") String token, @Body Map<String, String> body);
 }

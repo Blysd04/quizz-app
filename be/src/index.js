@@ -17,7 +17,7 @@ app.use(express.json()); // Để server đọc được dữ liệu JSON gửi 
 app.use('/api/questions', questionRoutes);
 
 // Kết nối MongoDB và Chạy Server
-mongoose.connect(process.env.MONGODB_URI)
+export const db = await mongoose.connect (process.env.MONGODB_URI)
   .then(() => {
     console.log('☘️ Kết nối cơ sở dữ liệu MongoDB thành công!');
     app.listen(PORT, () => {
