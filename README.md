@@ -78,11 +78,11 @@ QuizzApp/
 
 | Màn hình Đăng nhập | Màn hình Trang chủ | Màn hình Chỉnh sửa câu hỏi |
 |---|---|---|
-| ![Đăng nhập](fe/images/login.png) | ![Trang chủ](fe/images/main.png) | ![Chỉnh sửa câu hỏi](fe/images/edit.png) |
+| ![Đăng nhập](images/login.png) | ![Trang chủ](images/main.png) | ![Chỉnh sửa câu hỏi](images/edit.png) |
 
 | Màn hình Thêm câu hỏi | Màn hình Làm bài Quiz | Màn hình Kết quả (Đúng/Sai) |
 |---|---|---|
-| ![Thêm câu hỏi](fe/images/add.png) | ![Làm bài quiz](fe/images/quiz.png) | ![Kết quả](fe/images/result.png) |
+| ![Thêm câu hỏi](images/add.png) | ![Làm bài quiz](images/quiz.png) | ![Kết quả](images/result.png) |
 
 Thành viên Thực hiện
 Học viên: Văn Đặng Tuyết Nga - Software Engineering
