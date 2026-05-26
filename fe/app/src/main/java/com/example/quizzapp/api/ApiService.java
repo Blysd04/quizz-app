@@ -26,7 +26,6 @@ public interface ApiService {
     Call<QuestionResponse> getQuestionById(@Header("Authorization") String token, @Path("id") String questionId);
 
     // 3. Tạo câu hỏi mới
-    // Sửa Map thành QuestionRequest
     @POST("api/questions")
     Call<QuestionResponse> createQuestion(
             @Header("Authorization") String token,
@@ -37,13 +36,12 @@ public interface ApiService {
     Call<QuestionResponse> updateQuestion(@Header("Authorization") String token, @Path("id") String id, @Body QuestionRequest request);
 
     // 5. Delete câu hỏi (Xóa)
-    // Đường dẫn bao gồm ID câu hỏi: api/questions/{id}
     @DELETE("api/questions/{id}")
     Call<Void> deleteQuestion(
             @Header("Authorization") String token,
             @Path("id") String questionId
     );
 
-    @POST("api/questions/me/fcm-token") // Hoặc đường dẫn tùy bạn
+    @POST("api/questions/me/fcm-token")
     Call<Void> updateFcmToken(@Header("Authorization") String token, @Body Map<String, String> body);
 }

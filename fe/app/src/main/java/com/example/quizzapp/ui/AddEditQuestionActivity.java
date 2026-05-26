@@ -145,7 +145,6 @@ public class AddEditQuestionActivity extends AppCompatActivity {
                     Toast.makeText(AddEditQuestionActivity.this, "Lưu thành công!", Toast.LENGTH_SHORT).show();
                     finish();
                 } else {
-                    // GHI ĐOẠN NÀY VÀO ĐÂY:
                     try {
                         String errorBody = response.errorBody() != null ? response.errorBody().string() : "Không có thông tin lỗi";
                         Log.e("DEBUG_API", "Lỗi Server (Code " + response.code() + "): " + errorBody);
@@ -226,7 +225,7 @@ public class AddEditQuestionActivity extends AppCompatActivity {
         }
 
         ApiService apiService = ApiClient.getClient().create(ApiService.class);
-        String authHeader = getAuthHeader(); // Sử dụng lại hàm getAuthHeader có sẵn của bạn
+        String authHeader = getAuthHeader(); // Sử dụng lại hàm getAuthHeader có sẵn
 
         apiService.deleteQuestion(authHeader, questionId).enqueue(new Callback<Void>() {
             @Override

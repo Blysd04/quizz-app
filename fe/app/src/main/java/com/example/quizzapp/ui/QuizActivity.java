@@ -97,7 +97,7 @@ public class QuizActivity extends AppCompatActivity {
 
                     // VÒNG LẶP LỌC: Chỉ add những câu hỏi nào có userId trùng với người dùng hiện tại
                     for (QuestionResponse q : response.body()) {
-                        // Bạn kiểm tra kĩ hàm getId() hoặc getUserId() hoặc getCreatorId() trong QuestionResponse nhé
+                        // kiểm tra kĩ hàm getId() hoặc getUserId() hoặc getCreatorId() trong QuestionResponse
                         if (q.getUserId() != null && q.getUserId().equals(currentUserId)) {
                             questionList.add(q);
                         }
@@ -155,7 +155,7 @@ public class QuizActivity extends AppCompatActivity {
                 params.setMargins(0, 0, 0, 24);
                 btnOption.setLayoutParams(params);
 
-                // Lấy text hiển thị đáp án bằng hàm của bạn
+                // Lấy text hiển thị đáp án bằng hàm
                 String optionText = option.getAnswerText();
                 btnOption.setText(optionText);
 

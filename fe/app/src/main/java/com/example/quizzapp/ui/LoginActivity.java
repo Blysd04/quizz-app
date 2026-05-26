@@ -112,7 +112,9 @@ public class LoginActivity extends AppCompatActivity {
                 String token = task.getResult().getToken();
                 getSharedPreferences("MyPrefs", MODE_PRIVATE).edit().putString("auth_token", token).apply();
 
-                // 2. GỬI FCM TOKEN LÊN SERVER
+                android.util.Log.d("POSTMAN_TOKEN", "Bearer " + token);
+
+                //GỬI FCM TOKEN LÊN SERVER
                 sendFcmTokenToServer(token);
 
                 Intent intent = new Intent(LoginActivity.this, MainActivity.class);
@@ -130,7 +132,7 @@ public class LoginActivity extends AppCompatActivity {
             String fcmToken = task.getResult();
             ApiService apiService = ApiClient.getClient().create(ApiService.class);
 
-            // Bạn cần tạo endpoint update-fcm ở server và phương thức trong ApiService
+            // tạo endpoint update-fcm ở server và phương thức trong ApiService
             Map<String, String> body = new HashMap<>();
             body.put("fcmToken", fcmToken);
 

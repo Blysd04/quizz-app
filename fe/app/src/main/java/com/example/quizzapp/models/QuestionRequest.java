@@ -23,7 +23,6 @@ public class QuestionRequest {
         this.options = options;
     }
 
-    // 4. CẦN THÊM GETTER (Đây có thể là lý do báo "1 related problem")
     public void setUserId(String userId) {
         this.userId = userId;
     }
